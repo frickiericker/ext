@@ -36,11 +36,11 @@ namespace ext
             // NOTE: 1.9x speedup on IvyBridge. Without this optimization
             // ratio-of-uniforms performs worse than cached Box-Muller.
 
-            auto x = u - 0.449871;
-            auto y = abs(v) + 0.386595;
-            auto q = x*x + y*(0.19600*y - 0.25472*x);
+            auto x = u - T(0.449871);
+            auto y = abs(v) + T(0.386595);
+            auto q = x*x + y*(T(0.19600)*y - T(0.25472)*x);
 
-            if (q > 0.27597 && (q > 0.27846 || v*v > -4 * (u*u) * log(u)))
+            if (q > T(0.27597) && (q > T(0.27846) || v*v > -4 * (u*u) * log(u)))
                 continue;
 
             return v / u;
