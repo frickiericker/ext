@@ -3,7 +3,7 @@ GTEST_DIR=      $(PROJECT_ROOT)/dep/googletest
 GTEST_OBJ=      $(GTEST_DIR)/src/gtest-all.o
 GTEST_DRIVER=   $(GTEST_DIR)/src/gtest_main.o
 INCLUDE_DIR=    $(PROJECT_ROOT)/include
-OBJECTS=        array_view.o iterator.o meta.o random.o
+OBJECTS=        array_view.o iterator.o meta.o random.o stream.o
 
 EXTRA_CXXFLAGS= -isystem $(GTEST_DIR) -isystem $(GTEST_DIR)/include \
                 -I $(INCLUDE_DIR) \
@@ -34,3 +34,4 @@ array_view.cc: $(INCLUDE_DIR)/ext/array_view.hpp
 iterator.cc: $(INCLUDE_DIR)/ext/iterator.hpp
 meta.cc: $(INCLUDE_DIR)/ext/meta.hpp
 random.cc: $(INCLUDE_DIR)/ext/random.hpp
+stream.cc: $(INCLUDE_DIR)/ext/stream.hpp
