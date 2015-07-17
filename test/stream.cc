@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 
-TEST(SaveStreamFlags, FlagsRecoverdOnScopeExit)
+TEST(SaveStreamFlags, FlagsRecoveredOnScopeExit)
 {
     std::stringstream stream;
 

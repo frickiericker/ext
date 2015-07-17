@@ -6,10 +6,17 @@
 
 namespace ext
 {
+    /**
+     * RAII utility for saving and restoring formatting information associated
+     * to an input/output stream. The managed information is: flags, precision,
+     * width, and fill. Locale, exception mask and error state are not managed.
+     */
     template<typename Char, typename CharTraits>
     struct stream_flags_restorer
     {
-        using stream_type = std::basic_ios<Char, CharTraits>;
+        using char_type = Char;
+        using char_traits = CharTraits;
+        using stream_type = std::basic_ios<char, char_traits>;
         using flags_type = typename stream_type::fmtflags;
 
         stream_flags_restorer(stream_flags_restorer const&) = delete;
@@ -20,20 +27,26 @@ namespace ext
         stream_flags_restorer(stream_type& stream)
             : stream_(stream)
             , flags_(stream.flags())
+            , precision_(stream.precision())
+            , width_(stream.width())
             , fill_(stream.fill())
         {
         }
 
         ~stream_flags_restorer()
         {
-            stream_.flags(flags_);
             stream_.fill(fill_);
+            stream_.width(width_);
+            stream_.precision(precision_);
+            stream_.flags(flags_);
         }
 
       private:
         stream_type& stream_;
         flags_type flags_;
-        Char fill_;
+        std::streamsize precision_;
+        std::streamsize width_;
+        char_type fill_;
     };
 
     template<typename Char, typename CharTraits>
