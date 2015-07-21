@@ -1,4 +1,5 @@
 #include <random>
+#include <sstream>
 #include <vector>
 #include <cmath>
 
@@ -6,6 +7,123 @@
 
 #include <ext/random.hpp>
 
+
+TEST(Xorshift1024Star, Interface)
+{
+    std::seed_seq seed_seq;
+
+    // Constructors
+    constexpr auto min = ext::xorshift1024_star::min();
+    constexpr auto max = ext::xorshift1024_star::max();
+    (void) min;
+    (void) max;
+
+    // Constructors
+    auto engine = ext::xorshift1024_star();
+    engine = ext::xorshift1024_star(0);
+    engine = ext::xorshift1024_star(seed_seq);
+
+    // Seeding functions
+    engine.seed();
+    engine.seed(0);
+    engine.seed(seed_seq);
+
+    // Generator functions
+    auto value = ext::xorshift1024_star::result_type{engine()};
+    (void) value;
+    engine.discard(10uLL);
+
+    // Comparison operators
+    auto engine2 = engine;
+    engine2.discard(10uLL);
+    ASSERT_EQ(engine, engine);
+    ASSERT_NE(engine, engine2);
+    ASSERT_NE(engine2, engine);
+
+    // Stream I/O
+    std::ostringstream os;
+    os << engine;
+    std::istringstream is(os.str());
+    is >> engine;
+}
+
+TEST(Jsf64, Interface)
+{
+    std::seed_seq seed_seq;
+
+    // Constructors
+    constexpr auto min = ext::jsf64::min();
+    constexpr auto max = ext::jsf64::max();
+    (void) min;
+    (void) max;
+
+    // Constructors
+    auto engine = ext::jsf64();
+    engine = ext::jsf64(0);
+    engine = ext::jsf64(seed_seq);
+
+    // Seeding functions
+    engine.seed();
+    engine.seed(0);
+    engine.seed(seed_seq);
+
+    // Generator functions
+    auto value = ext::jsf64::result_type{engine()};
+    (void) value;
+    engine.discard(10uLL);
+
+    // Comparison operators
+    auto engine2 = engine;
+    engine2.discard(10uLL);
+    ASSERT_EQ(engine, engine);
+    ASSERT_NE(engine, engine2);
+    ASSERT_NE(engine2, engine);
+
+    // Stream I/O
+    std::ostringstream os;
+    os << engine;
+    std::istringstream is(os.str());
+    is >> engine;
+}
+
+TEST(Sfc64, Interface)
+{
+    std::seed_seq seed_seq;
+
+    // Constructors
+    constexpr auto min = ext::sfc64::min();
+    constexpr auto max = ext::sfc64::max();
+    (void) min;
+    (void) max;
+
+    // Constructors
+    auto engine = ext::sfc64();
+    engine = ext::sfc64(0);
+    engine = ext::sfc64(seed_seq);
+
+    // Seeding functions
+    engine.seed();
+    engine.seed(0);
+    engine.seed(seed_seq);
+
+    // Generator functions
+    auto value = ext::sfc64::result_type{engine()};
+    (void) value;
+    engine.discard(10uLL);
+
+    // Comparison operators
+    auto engine2 = engine;
+    engine2.discard(10uLL);
+    ASSERT_EQ(engine, engine);
+    ASSERT_NE(engine, engine2);
+    ASSERT_NE(engine2, engine);
+
+    // Stream I/O
+    std::ostringstream os;
+    os << engine;
+    std::istringstream is(os.str());
+    is >> engine;
+}
 
 TEST(GenerateNormal, MomentTestFloat)
 {
