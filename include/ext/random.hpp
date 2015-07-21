@@ -24,7 +24,7 @@
 
 namespace ext
 {
-    namespace detail
+    namespace random_detail
     {
         template<typename S>
         auto try_seed_seq_generate(
@@ -42,7 +42,7 @@ namespace ext
      * Determines whether T satisfies the seed sequence requirements.
      */
     template<typename T>
-    struct is_seed_sequence : n4502::is_detected<detail::seed_seq_generate_t, T>
+    struct is_seed_sequence : n4502::is_detected<random_detail::seed_seq_generate_t, T>
     {
     };
 }
