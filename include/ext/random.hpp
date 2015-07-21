@@ -353,7 +353,7 @@ namespace ext
             random_detail::seed_extender<std::uint64_t>>;
 
 
-    namespace detail
+    namespace random_detail
     {
         /*
          * Calculates left rotation (or barrel shift) of unsigned integer.
@@ -505,7 +505,7 @@ namespace ext
         constexpr
         result_type operator()() noexcept
         {
-            using detail::rotate;
+            using random_detail::rotate;
 
             auto& a = state_a_;
             auto& b = state_b_;
@@ -754,7 +754,7 @@ namespace ext
         constexpr
         result_type operator()() noexcept
         {
-            using detail::rotate;
+            using random_detail::rotate;
 
             auto& counter = counter_;
             auto& a = state_a_;
