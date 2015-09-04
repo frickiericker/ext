@@ -230,3 +230,84 @@ TEST(GetOpt, InitialColon)
     ASSERT_EQ(1, colon);
     ASSERT_EQ(0, unknown);
 }
+
+// Double-hypen terminates option parsing
+TEST(GetOpt, DoubleHyphen)
+{
+    int argc = 3;
+    char argv_0[] = "prog";
+    char argv_1[] = "-a";
+    char argv_2[] = "--";
+    char argv_3[] = "-x";
+    char* argv[] = {argv_0, argv_1, argv_2, argv_3, nullptr};
+
+    ext::getopt getopt;
+
+    int a = 0;
+    int x = 0;
+    int unknown = 0;
+
+    for (int optchar; (optchar = getopt(argc, argv, "ax:")) != -1; )
+    {
+        switch (optchar)
+        {
+          case 'a':
+            ++a;
+            break;
+
+          case 'x':
+            ++x;
+            break;
+
+          default:
+            ++unknown;
+            break;
+        }
+    }
+    ASSERT_EQ(3, getopt.optind);
+
+    ASSERT_EQ(1, a);
+    ASSERT_EQ(0, x);
+    ASSERT_EQ(0, unknown);
+}
+
+// Single-hypen is considered to be a positional argument, thus terminates
+// option parsing without incrementing optind (unlike double-hyphen)
+TEST(GetOpt, SingleHyphen)
+{
+    int argc = 3;
+    char argv_0[] = "prog";
+    char argv_1[] = "-a";
+    char argv_2[] = "-";
+    char argv_3[] = "-x";
+    char* argv[] = {argv_0, argv_1, argv_2, argv_3, nullptr};
+
+    ext::getopt getopt;
+
+    int a = 0;
+    int x = 0;
+    int unknown = 0;
+
+    for (int optchar; (optchar = getopt(argc, argv, "ax:")) != -1; )
+    {
+        switch (optchar)
+        {
+          case 'a':
+            ++a;
+            break;
+
+          case 'x':
+            ++x;
+            break;
+
+          default:
+            ++unknown;
+            break;
+        }
+    }
+    ASSERT_EQ(2, getopt.optind);
+
+    ASSERT_EQ(1, a);
+    ASSERT_EQ(0, x);
+    ASSERT_EQ(0, unknown);
+}
