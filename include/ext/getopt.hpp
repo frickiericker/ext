@@ -1,7 +1,6 @@
 #ifndef EXT_GETOPT_HPP
 #define EXT_GETOPT_HPP
 
-#include <cassert>
 #include <cstdio>
 #include <cstring>
 
