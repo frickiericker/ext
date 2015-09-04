@@ -16,6 +16,8 @@ TEST(GetOpt, FlagArguments)
 
     ext::getopt getopt;
 
+    ASSERT_EQ(1, getopt.optind);
+
     int a = 0;
     int b = 0;
     int _1 = 0;
@@ -30,7 +32,7 @@ TEST(GetOpt, FlagArguments)
         {
           case 'a':
             ++a;
-            ASSERT_EQ(1, getopt.optind);
+            ASSERT_EQ(2, getopt.optind);
             ASSERT_EQ('a', getopt.optopt);
             break;
 
@@ -108,14 +110,14 @@ TEST(GetOpt, Optarg)
 
           case 'x':
             ++x;
-            ASSERT_EQ(1, getopt.optind);
+            ASSERT_EQ(3, getopt.optind);
             ASSERT_EQ('x', getopt.optopt);
             ASSERT_STREQ("hoge", getopt.optarg);
             break;
 
           case 'y':
             ++y;
-            ASSERT_EQ(3, getopt.optind);
+            ASSERT_EQ(4, getopt.optind);
             ASSERT_EQ('y', getopt.optopt);
             ASSERT_STREQ("fuga", getopt.optarg);
             break;
@@ -203,15 +205,15 @@ TEST(GetOpt, InitialColon)
             ++x;
             break;
 
-          case '?':
+          case '?': // -b
             ++question;
-            ASSERT_EQ(1, getopt.optind);
+            ASSERT_EQ(2, getopt.optind);
             ASSERT_EQ('b', getopt.optopt);
             break;
 
-          case ':':
+          case ':': // -x <nothing>
             ++colon;
-            ASSERT_EQ(2, getopt.optind);
+            ASSERT_GT(getopt.optind, argc); // POSIX
             ASSERT_EQ('x', getopt.optopt);
             break;
 
@@ -220,7 +222,7 @@ TEST(GetOpt, InitialColon)
             break;
         }
     }
-    ASSERT_EQ(3, getopt.optind);
+    ASSERT_GT(getopt.optind, argc); // POSIX
 
     ASSERT_EQ(1, a);
     ASSERT_EQ(0, x);
