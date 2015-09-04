@@ -87,6 +87,26 @@ namespace ext
         }
 
         constexpr
+        reference at(size_type idx)
+        {
+            if (idx > size_)
+            {
+                throw std::range_error("out of range");
+            }
+            return ptr_[idx];
+        }
+
+        constexpr
+        const_reference at(size_type idx) const
+        {
+            if (idx > size_)
+            {
+                throw std::range_error("out of range");
+            }
+            return ptr_[idx];
+        }
+
+        constexpr
         reference front()
         {
             return *ptr_;
