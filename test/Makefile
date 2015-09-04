@@ -30,9 +30,9 @@ $(DRIVER): $(OBJECTS) $(GTEST_DRIVER) $(GTEST_OBJ)
 	$(CXX) $(CXXFLAGS) $(EXTRA_CXXFLAGS) $(LDFLAGS) -o $(DRIVER) $(OBJECTS) $(GTEST_DRIVER) $(GTEST_OBJ)
 
 # Dependencies
-array_view.cc: $(INCLUDE_DIR)/ext/array_view.hpp
-getopt.cc: $(INCLUDE_DIR)/ext/getopt.hpp
-iterator.cc: $(INCLUDE_DIR)/ext/iterator.hpp
-meta.cc: $(INCLUDE_DIR)/ext/meta.hpp
-random.cc: $(INCLUDE_DIR)/ext/random.hpp
-stream.cc: $(INCLUDE_DIR)/ext/stream.hpp
+array_view.o: $(INCLUDE_DIR)/ext/array_view.hpp
+getopt.o: $(INCLUDE_DIR)/ext/getopt.hpp
+iterator.o: $(INCLUDE_DIR)/ext/iterator.hpp
+meta.o: $(INCLUDE_DIR)/ext/meta.hpp
+random.o: $(INCLUDE_DIR)/ext/random.hpp
+stream.o: $(INCLUDE_DIR)/ext/stream.hpp
