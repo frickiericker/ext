@@ -32,7 +32,10 @@ namespace ext
          */
         int operator()(int argc, char* const* argv, char const* optstring)
         {
-            if (optind >= argc || !argv[optind] || *argv[optind] != '-')
+            if (optind >= argc
+                || !argv[optind]
+                || argv[optind][0] != '-'
+                || argv[optind][1] == '\0')
             {
                 return -1;
             }
@@ -43,6 +46,7 @@ namespace ext
                 return -1;
             }
 
+            // Get next option char
             if (!curopt_ || *curopt_ == '\0')
             {
                 curopt_ = argv[optind] + 1;
