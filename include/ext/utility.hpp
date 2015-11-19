@@ -22,7 +22,7 @@ namespace ext
      * Returns the smallest multiple of b that is no less than a.
      */
     template< typename I
-            , std::enable_if_t<std::is_integral<T>::value, int> = 0>
+            , std::enable_if_t<std::is_integral<I>::value, int> = 0>
     constexpr
     I round_up(I a, I b)
     {
