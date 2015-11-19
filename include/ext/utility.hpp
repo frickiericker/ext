@@ -6,6 +6,19 @@
 namespace ext
 {
     /**
+     * Convertes reference to const-reference.
+     */
+    template<typename T>
+    constexpr
+    T const& as_const(T const& x) noexcept
+    {
+        return x;
+    }
+}
+
+namespace ext
+{
+    /**
      * Returns the smallest multiple of b that is no less than a.
      */
     template< typename I
