@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <iterator>
+#include <memory>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -11,6 +12,7 @@
 #include <cassert>
 #include <cstddef>
 
+#include "meta.hpp"
 
 namespace ext
 {
@@ -324,6 +326,193 @@ namespace ext
     array_view<T const> make_array_view(T const* ptr, std::size_t size)
     {
         return array_view<T const>(ptr, size);
+    }
+}
+
+//____ Array View with Member Reference ______________________________________
+
+namespace ext
+{
+    /*
+     * Random-access iterator adaptor for accessing non-static data member of
+     * the objects in underlying array.
+     */
+    template<typename T, typename M>
+    struct member_array_iterator
+    {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = M;
+        using access_type = ext::propagate_cv_t<T, M>;
+        using member_ptr = M T::*;
+        using reference = access_type&;
+        using pointer = access_type*;
+        using difference_type = std::ptrdiff_t;
+
+        member_array_iterator(T* base, M T::* member)
+            : base_(base)
+            , member_(member)
+        {
+        }
+
+        friend bool operator==(member_array_iterator const& i, member_array_iterator const& j)
+        {
+            return i.base_ == j.base_ && i.member_ == j.member_;
+        }
+
+        friend bool operator!=(member_array_iterator const& i, member_array_iterator const& j)
+        {
+            return !(i == j);
+        }
+
+        reference operator*() const
+        {
+            return base_->*member_;
+        }
+
+        pointer operator->() const
+        {
+            return std::addressof(base_->*member_);
+        }
+
+        // Forward
+
+        member_array_iterator& operator++()
+        {
+            ++base_;
+            return *this;
+        }
+
+        member_array_iterator operator++(int)
+        {
+            member_array_iterator copy(*this);
+            ++*this;
+            return copy;
+        }
+
+        // Bidirectional
+
+        member_array_iterator& operator--()
+        {
+            --base_;
+            return *this;
+        }
+
+        member_array_iterator operator--(int)
+        {
+            member_array_iterator copy(*this);
+            --*this;
+            return copy;
+        }
+
+        // Random-access
+
+        member_array_iterator& operator+=(difference_type z)
+        {
+            base_ += z;
+            return *this;
+        }
+
+        member_array_iterator operator-=(difference_type z)
+        {
+            base_ -= z;
+            return *this;
+        }
+
+        friend
+        difference_type operator-(member_array_iterator const& i, member_array_iterator const& j)
+        {
+            return i.base_ - j.base_;
+        }
+
+      private:
+        T* base_;
+        M T::* member_;
+    };
+
+    template< typename T, typename M
+            , typename D = typename member_array_iterator<T, M>::difference_type>
+    member_array_iterator<T, M> operator+(member_array_iterator<T, M> i, D z)
+    {
+        return i += z;
+    }
+
+    template< typename T, typename M
+            , typename D = typename member_array_iterator<T, M>::difference_type>
+    member_array_iterator<T, M> operator-(member_array_iterator<T, M> i, D z)
+    {
+        return i -= z;
+    }
+
+    /*
+     * Similar to array_view<T>, but this class provides access to non-static
+     * data member of the array elements via pointer-to-member.
+     */
+    template<typename T, typename M>
+    struct member_array_view
+    {
+        using value_type = M;
+        using access_type = ext::propagate_cv_t<T, M>;
+        using size_type = std::size_t;
+        using member_ptr = M T::*;
+        using reference = access_type&;
+        using pointer = access_type*;
+        using iterator = member_array_iterator<T, M>;
+
+        // TODO: more constructors with type convertion
+
+        member_array_view() = default;
+
+        member_array_view(T* data, size_type size, member_ptr member)
+            : data_(data)
+            , size_(size)
+            , member_(member)
+        {
+        }
+
+        // TODO: more members
+
+        size_type size() const noexcept
+        {
+            return size_;
+        }
+
+        iterator begin() const
+        {
+            return iterator(data_, member_);
+        }
+
+        iterator end() const
+        {
+            return iterator(data_ + size_, member_);
+        }
+
+        reference operator[](size_type idx) const
+        {
+            return data_[idx].*member_;
+        }
+
+      private:
+        T* data_ = nullptr;
+        size_type size_ = 0;
+        member_ptr member_ = nullptr;
+    };
+
+    template<typename T, typename M, typename A>
+    auto make_member_array_view(std::vector<T, A>& vec, M T::* member) noexcept
+    {
+        return member_array_view<T, M>(vec.data(), vec.size(), member);
+    }
+
+    template<typename T, typename M, typename A>
+    auto make_member_array_view(std::vector<T, A> const& vec, M T::* member) noexcept
+    {
+        return member_array_view<T const, M>(vec.data(), vec.size(), member);
+    }
+
+    template<typename T, typename M>
+    auto make_member_array_view(T* data, std::size_t size, M std::remove_cv_t<T>::* member)
+    {
+        return member_array_view<T, M>(data, size, member);
     }
 }
 
