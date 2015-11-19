@@ -4,10 +4,28 @@
 #include <iterator>
 #include <type_traits>
 
+#include <cstddef>
+
 #include <boost/range/adaptor/strided.hpp>
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 
+
+namespace ext
+{
+    template<typename T>
+    auto size(T const& c) noexcept(c.size()) -> decltype(c.size())
+    {
+        return c.size();
+    }
+
+    template<typename T, std::size_t N>
+    constexpr
+    std::size_t size(T(&)[N]) noexcept
+    {
+        return N;
+    }
+}
 
 namespace ext
 {
