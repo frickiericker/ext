@@ -120,4 +120,22 @@ namespace ext
     using n4502::detected_t;
 }
 
+namespace ext
+{
+    template<typename T, typename U>
+    struct propagate_cv { using type = U; };
+
+    template<typename T, typename U>
+    struct propagate_cv<T const, U> { using type = U const; };
+
+    template<typename T, typename U>
+    struct propagate_cv<T volatile, U> { using type = U volatile; };
+
+    template<typename T, typename U>
+    struct propagate_cv<T const volatile, U> { using type = U const volatile; };
+
+    template<typename T, typename U>
+    using propagate_cv_t = typename propagate_cv<T, U>::type;
+}
+
 #endif
