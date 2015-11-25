@@ -74,6 +74,57 @@ namespace ext
         {
         }
 
+        /**
+         * Conversion from std::vector.
+         */
+        template<typename U, typename Allocator,
+                 std::enable_if_t<std::is_convertible<U*, T*>::value, int> = 0>
+        array_view(std::vector<U, Allocator>& vec) noexcept
+            : ptr_(vec.data()), size_(vec.size())
+        {
+        }
+
+        template<typename U, typename Allocator,
+                 std::enable_if_t<std::is_convertible<U const*, T*>::value, int> = 0>
+        array_view(std::vector<U, Allocator> const& vec) noexcept
+            : ptr_(vec.data()), size_(vec.size())
+        {
+        }
+
+        /**
+         * Conversion from std::array.
+         */
+        template<typename U, std::size_t N,
+                 std::enable_if_t<std::is_convertible<U*, T*>::value, int> = 0>
+        array_view(std::array<U, N>& ary) noexcept
+            : ptr_(ary.data()), size_(ary.size())
+        {
+        }
+
+        template<typename U, std::size_t N,
+                 std::enable_if_t<std::is_convertible<U const*, T*>::value, int> = 0>
+        array_view(std::array<U, N> const& ary) noexcept
+            : ptr_(ary.data()), size_(ary.size())
+        {
+        }
+
+        /*
+         * Conversion from built-in array.
+         */
+        template<typename U, std::size_t N,
+                 std::enable_if_t<std::is_convertible<U*, T*>::value, int> = 0>
+        array_view(U(& ary)[N]) noexcept
+            : ptr_(ary), size_(N)
+        {
+        }
+
+        template<typename U, std::size_t N,
+                 std::enable_if_t<std::is_convertible<U const*, T*>::value, int> = 0>
+        array_view(U const(& ary)[N]) noexcept
+            : ptr_(ary), size_(N)
+        {
+        }
+
         // Element access functions ____________________________________________
 
         constexpr
