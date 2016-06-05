@@ -14,7 +14,7 @@
 namespace ext
 {
     template<typename T>
-    auto size(T const& c) noexcept(c.size()) -> decltype(c.size())
+    auto size(T const& c) noexcept(noexcept(c.size())) -> decltype(c.size())
     {
         return c.size();
     }
