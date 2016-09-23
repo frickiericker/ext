@@ -1,12 +1,12 @@
 #include <ios>
 #include <sstream>
 
+#include <catch.hpp>
+
 #include <ext/stream.hpp>
 
-#include <gtest/gtest.h>
 
-
-TEST(SaveStreamFlags, FlagsRecoveredOnScopeExit)
+TEST_CASE("ext::save_stream_flags / flag recovery on scope out")
 {
     std::stringstream stream;
 
@@ -17,10 +17,10 @@ TEST(SaveStreamFlags, FlagsRecoveredOnScopeExit)
         stream.fill('0');
         stream.width(4);
         stream << 255;
-        ASSERT_EQ(stream.str(), "00ff");
+        CHECK(stream.str() == "00ff");
     }
 
     // Now the default stream flags should be recovered.
     stream << 123;
-    ASSERT_EQ(stream.str(), "00ff123");
+    CHECK(stream.str() == "00ff123");
 }

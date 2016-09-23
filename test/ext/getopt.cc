@@ -1,10 +1,10 @@
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <ext/getopt.hpp>
 
 
 // Test how options without argument are handled
-TEST(GetOpt, FlagArguments)
+TEST_CASE("ext::getopt / flag argumnets")
 {
     int argc = 5;
     char argv_0[] = "prog";
@@ -16,7 +16,7 @@ TEST(GetOpt, FlagArguments)
 
     ext::getopt getopt;
 
-    ASSERT_EQ(1, getopt.optind);
+    CHECK(getopt.optind == 1);
 
     int a = 0;
     int b = 0;
@@ -32,31 +32,31 @@ TEST(GetOpt, FlagArguments)
         {
           case 'a':
             ++a;
-            ASSERT_EQ(2, getopt.optind);
-            ASSERT_EQ('a', getopt.optopt);
+            CHECK(getopt.optind == 2);
+            CHECK(getopt.optopt == 'a');
             break;
 
           case 'b':
             ++b;
-            ASSERT_EQ(2, getopt.optind);
-            ASSERT_EQ('b', getopt.optopt);
+            CHECK(getopt.optind == 2);
+            CHECK(getopt.optopt == 'b');
             break;
 
           case '1':
             ++_1;
-            ASSERT_EQ(3, getopt.optind);
-            ASSERT_EQ('1', getopt.optopt);
+            CHECK(getopt.optind == 3);
+            CHECK(getopt.optopt == '1');
             break;
 
           case '2':
             ++_2;
-            ASSERT_EQ(3, getopt.optind);
-            ASSERT_EQ('2', getopt.optopt);
+            CHECK(getopt.optind == 3);
+            CHECK(getopt.optopt == '2');
             break;
 
           case 'v':
             ++v;
-            ASSERT_EQ('v', getopt.optopt);
+            CHECK(getopt.optopt == 'v');
             break;
 
           case 'w':
@@ -68,19 +68,19 @@ TEST(GetOpt, FlagArguments)
             break;
         }
     }
-    ASSERT_EQ(4, getopt.optind);
+    CHECK(getopt.optind == 4);
 
-    ASSERT_EQ(1, a);
-    ASSERT_EQ(1, b);
-    ASSERT_EQ(1, _1);
-    ASSERT_EQ(1, _2);
-    ASSERT_EQ(3, v);
-    ASSERT_EQ(0, w);
-    ASSERT_EQ(0, unknown);
+    CHECK(a == 1);
+    CHECK(b == 1);
+    CHECK(_1 == 1);
+    CHECK(_2 == 1);
+    CHECK(v == 3);
+    CHECK(w == 0);
+    CHECK(unknown == 0);
 }
 
 // Test how options with argument are handled
-TEST(GetOpt, Optarg)
+TEST_CASE("ext::getopt / optarg")
 {
     int argc = 5;
     char argv_0[] = "prog";
@@ -104,22 +104,22 @@ TEST(GetOpt, Optarg)
         {
           case 'a':
             ++a;
-            ASSERT_EQ(3, getopt.optind);
-            ASSERT_EQ('a', getopt.optopt);
+            CHECK(getopt.optind == 3);
+            CHECK(getopt.optopt == 'a');
             break;
 
           case 'x':
             ++x;
-            ASSERT_EQ(3, getopt.optind);
-            ASSERT_EQ('x', getopt.optopt);
-            ASSERT_STREQ("hoge", getopt.optarg);
+            CHECK(getopt.optind == 3);
+            CHECK(getopt.optopt == 'x');
+            CHECK_THAT(getopt.optarg, Catch::Equals("hoge"));
             break;
 
           case 'y':
             ++y;
-            ASSERT_EQ(4, getopt.optind);
-            ASSERT_EQ('y', getopt.optopt);
-            ASSERT_STREQ("fuga", getopt.optarg);
+            CHECK(getopt.optind == 4);
+            CHECK(getopt.optopt == 'y');
+            CHECK_THAT(getopt.optarg, Catch::Equals("fuga"));
             break;
 
           case 'z':
@@ -131,17 +131,17 @@ TEST(GetOpt, Optarg)
             break;
         }
     }
-    ASSERT_EQ(4, getopt.optind);
+    CHECK(getopt.optind == 4);
 
-    ASSERT_EQ(1, a);
-    ASSERT_EQ(1, x);
-    ASSERT_EQ(1, y);
-    ASSERT_EQ(0, z);
-    ASSERT_EQ(0, unknown);
+    CHECK(a == 1);
+    CHECK(x == 1);
+    CHECK(y == 1);
+    CHECK(z == 0);
+    CHECK(unknown == 0);
 }
 
 // Test if getopt is not messed up by single-element argv
-TEST(GetOpt, SingleArgv)
+TEST_CASE("ext::getopt / deal with single argv")
 {
     int argc = 1;
     char argv_0[] = "prog";
@@ -170,14 +170,14 @@ TEST(GetOpt, SingleArgv)
             break;
         }
     }
-    ASSERT_EQ(1, getopt.optind);
+    CHECK(getopt.optind == 1);
 
-    ASSERT_EQ(0, a);
-    ASSERT_EQ(0, x);
+    CHECK(a == 0);
+    CHECK(x == 0);
 }
 
 // Initial colon of optstring suppresses diagnostics by getopt
-TEST(GetOpt, InitialColon)
+TEST_CASE("ext::getopt / initial colon of optstring")
 {
     int argc = 3;
     char argv_0[] = "prog";
@@ -207,14 +207,14 @@ TEST(GetOpt, InitialColon)
 
           case '?': // -b
             ++question;
-            ASSERT_EQ(2, getopt.optind);
-            ASSERT_EQ('b', getopt.optopt);
+            CHECK(getopt.optind == 2);
+            CHECK(getopt.optopt == 'b');
             break;
 
           case ':': // -x <nothing>
             ++colon;
-            ASSERT_GT(getopt.optind, argc); // POSIX
-            ASSERT_EQ('x', getopt.optopt);
+            CHECK(getopt.optind > argc); // POSIX
+            CHECK(getopt.optopt == 'x');
             break;
 
           default:
@@ -222,17 +222,17 @@ TEST(GetOpt, InitialColon)
             break;
         }
     }
-    ASSERT_GT(getopt.optind, argc); // POSIX
+    CHECK(getopt.optind > argc); // POSIX
 
-    ASSERT_EQ(1, a);
-    ASSERT_EQ(0, x);
-    ASSERT_EQ(1, question);
-    ASSERT_EQ(1, colon);
-    ASSERT_EQ(0, unknown);
+    CHECK(a == 1);
+    CHECK(x == 0);
+    CHECK(question == 1);
+    CHECK(colon == 1);
+    CHECK(unknown == 0);
 }
 
 // Double-hypen terminates option parsing
-TEST(GetOpt, DoubleHyphen)
+TEST_CASE("ext::getopt / double-hyphen")
 {
     int argc = 3;
     char argv_0[] = "prog";
@@ -264,16 +264,16 @@ TEST(GetOpt, DoubleHyphen)
             break;
         }
     }
-    ASSERT_EQ(3, getopt.optind);
+    CHECK(getopt.optind == 3);
 
-    ASSERT_EQ(1, a);
-    ASSERT_EQ(0, x);
-    ASSERT_EQ(0, unknown);
+    CHECK(a == 1);
+    CHECK(x == 0);
+    CHECK(unknown == 0);
 }
 
 // Single-hypen is considered to be a positional argument, thus terminates
 // option parsing without incrementing optind (unlike double-hyphen)
-TEST(GetOpt, SingleHyphen)
+TEST_CASE("ext::getopt / single-hyphen")
 {
     int argc = 3;
     char argv_0[] = "prog";
@@ -305,9 +305,9 @@ TEST(GetOpt, SingleHyphen)
             break;
         }
     }
-    ASSERT_EQ(2, getopt.optind);
+    CHECK(getopt.optind == 2);
 
-    ASSERT_EQ(1, a);
-    ASSERT_EQ(0, x);
-    ASSERT_EQ(0, unknown);
+    CHECK(a == 1);
+    CHECK(x == 0);
+    CHECK(unknown == 0);
 }

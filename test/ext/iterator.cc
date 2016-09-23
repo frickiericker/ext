@@ -2,170 +2,171 @@
 #include <forward_list>
 #include <type_traits>
 #include <vector>
+#include <cstddef>
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <ext/iterator.hpp>
 
 
 // Integral Range
 
-TEST(IntRange, BasicUse)
+TEST_CASE("ext::range (integral) / basic usage")
 {
     auto r1 = ext::range(5);
-    ASSERT_EQ(r1.size(), 5);
+    CHECK(r1.size() == std::size_t(5));
     auto i1 = r1.begin();
-    ASSERT_EQ(*i1, 0);
+    CHECK(*i1 == 0);
     ++i1;
-    ASSERT_EQ(*i1, 1);
+    CHECK(*i1 == 1);
     ++i1;
-    ASSERT_EQ(*i1, 2);
+    CHECK(*i1 == 2);
     ++i1;
-    ASSERT_EQ(*i1, 3);
+    CHECK(*i1 == 3);
     ++i1;
-    ASSERT_EQ(*i1, 4);
+    CHECK(*i1 == 4);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 
     auto r2 = ext::range(2, 6);
-    ASSERT_EQ(r2.size(), 4);
+    CHECK(r2.size() == std::size_t(4));
     auto i2 = r2.begin();
-    ASSERT_EQ(*i2, 2);
+    CHECK(*i2 == 2);
     ++i2;
-    ASSERT_EQ(*i2, 3);
+    CHECK(*i2 == 3);
     ++i2;
-    ASSERT_EQ(*i2, 4);
+    CHECK(*i2 == 4);
     ++i2;
-    ASSERT_EQ(*i2, 5);
+    CHECK(*i2 == 5);
     ++i2;
-    ASSERT_EQ(i2, r2.end());
+    CHECK(i2 == r2.end());
 }
 
-TEST(IntRange, DegenerateCases)
+TEST_CASE("ext::range (integral) / degenerate cases")
 {
     auto r1 = ext::range(0);
-    ASSERT_EQ(r1.size(), 0);
-    ASSERT_EQ(r1.begin(), r1.end());
+    CHECK(r1.size() == std::size_t(0));
+    CHECK(r1.begin() == r1.end());
 
     auto r2 = ext::range(5, 5);
-    ASSERT_EQ(r2.size(), 0);
-    ASSERT_EQ(r2.begin(), r2.end());
+    CHECK(r2.size() == std::size_t(0));
+    CHECK(r2.begin() == r2.end());
 }
 
-TEST(IntRange, ExplicitType)
+TEST_CASE("ext::range (integral) / explicit type")
 {
     auto r1 = ext::range<signed char>(15);
-    ASSERT_EQ(r1.size(), 15);
+    CHECK(r1.size() == std::size_t(15));
     auto i1 = r1.begin();
     signed char r1_typecheck = *i1;
-    ASSERT_EQ(r1_typecheck, 0);
+    CHECK(r1_typecheck == static_cast<signed char>(0));
 
     auto r2 = ext::range<signed char>(-5, 5);
-    ASSERT_EQ(r2.size(), 10);
+    CHECK(r2.size() == std::size_t(10));
     auto i2 = r2.begin();
     signed char r2_typecheck = *i2;
-    ASSERT_EQ(r2_typecheck, -5);
+    CHECK(r2_typecheck == static_cast<signed char>(-5));
 }
 
-TEST(IntRange, RandomAccess)
+TEST_CASE("ext::range (integral) / random access")
 {
     auto r1 = ext::range<long>(1000000L);
-    ASSERT_EQ(r1.size(), 1000000);
+    CHECK(r1.size() == std::size_t(1000000));
     auto i1 = r1.begin();
     i1 += 999999;
-    ASSERT_EQ(*i1, 999999);
+    CHECK(*i1 == 999999);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
     i1 -= 100000;
-    ASSERT_EQ(*i1, 900000);
+    CHECK(*i1 == 900000);
     --i1;
-    ASSERT_EQ(*i1, 899999);
+    CHECK(*i1 == 899999);
 }
 
-TEST(IntRange, Step)
+TEST_CASE("ext::range (integral) / positive step")
 {
     auto r1 = ext::range(3, 10, 2);
-    ASSERT_EQ(r1.size(), 4);
+    CHECK(r1.size() == std::size_t(4));
     auto i1 = r1.begin();
-    ASSERT_EQ(*i1, 3);
+    CHECK(*i1 == 3);
     ++i1;
-    ASSERT_EQ(*i1, 5);
+    CHECK(*i1 == 5);
     ++i1;
-    ASSERT_EQ(*i1, 7);
+    CHECK(*i1 == 7);
     ++i1;
-    ASSERT_EQ(*i1, 9);
+    CHECK(*i1 == 9);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 
     auto r2 = ext::range(1, 2, 3);
-    ASSERT_EQ(r2.size(), 1);
+    CHECK(r2.size() == std::size_t(1));
     auto i2 = r2.begin();
-    ASSERT_EQ(*i2, 1);
+    CHECK(*i2 == 1);
     ++i2;
-    ASSERT_EQ(i2, r2.end());
+    CHECK(i2 == r2.end());
 }
 
-TEST(IntRange, NegativeStep)
+TEST_CASE("ext::range (integral) / negative step")
 {
     auto r1 = ext::range(5, 2, -1);
-    ASSERT_EQ(r1.size(), 3);
+    CHECK(r1.size() == std::size_t(3));
     auto i1 = r1.begin();
-    ASSERT_EQ(*i1, 5);
+    CHECK(*i1 == 5);
     ++i1;
-    ASSERT_EQ(*i1, 4);
+    CHECK(*i1 == 4);
     ++i1;
-    ASSERT_EQ(*i1, 3);
+    CHECK(*i1 == 3);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 }
 
 // Iterator Range
 
-TEST(IteratorRange, RandomAccess)
+TEST_CASE("ext::range (iterator) / random access")
 {
     auto v1 = std::vector<int> {1, 2, 3};
     auto r1 = ext::range(v1.begin(), v1.end());
     auto i1 = r1.begin();
-    ASSERT_EQ(&*i1, &v1[0]);
+    CHECK(&*i1 == &v1[0]);
     ++i1;
-    ASSERT_EQ(&*i1, &v1[1]);
+    CHECK(&*i1 == &v1[1]);
     i1 += 2;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 }
 
-TEST(IteratorRange, ForwardAccess)
+TEST_CASE("ext::range (iterator) / forward access")
 {
     auto l1 = std::forward_list<int> {1, 2, 3};
     auto r1 = ext::range(l1.begin(), l1.end());
     auto i1 = r1.begin();
-    ASSERT_EQ(*i1, 1);
+    CHECK(*i1 == 1);
     ++i1;
-    ASSERT_EQ(*i1, 2);
+    CHECK(*i1 == 2);
     ++i1;
-    ASSERT_EQ(*i1, 3);
+    CHECK(*i1 == 3);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 }
 
-TEST(IteratorRange, Step)
+TEST_CASE("ext::range (iterator) / positive step")
 {
     auto v1 = std::vector<int> {1, 2, 3, 4};
     auto r1 = ext::range(v1.begin(), v1.end(), 2);
     auto i1 = r1.begin();
-    ASSERT_EQ(*i1, 1);
+    CHECK(*i1 == 1);
     ++i1;
-    ASSERT_EQ(*i1, 3);
+    CHECK(*i1 == 3);
     ++i1;
-    ASSERT_EQ(i1, r1.end());
+    CHECK(i1 == r1.end());
 
     auto l2 = std::forward_list<int> {1, 2, 3, 4, 5, 6, 7};
     auto r2 = ext::range(l2.begin(), l2.end(), 3);
     auto i2 = r2.begin();
-    ASSERT_EQ(*i2, 1);
+    CHECK(*i2 == 1);
     ++i2;
-    ASSERT_EQ(*i2, 4);
+    CHECK(*i2 == 4);
     ++i2;
-    ASSERT_EQ(*i2, 7);
+    CHECK(*i2 == 7);
     ++i2;
-    ASSERT_EQ(i2, r2.end());
+    CHECK(i2 == r2.end());
 }

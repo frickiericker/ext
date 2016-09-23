@@ -3,12 +3,12 @@
 #include <vector>
 #include <cmath>
 
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <ext/random.hpp>
 
 
-TEST(Xorshift1024Star, Interface)
+TEST_CASE("ext::xorshift1024_star / random engine interface")
 {
     std::seed_seq seed_seq;
 
@@ -36,9 +36,9 @@ TEST(Xorshift1024Star, Interface)
     // Comparison operators
     auto engine2 = engine;
     engine2.discard(10uLL);
-    ASSERT_EQ(engine, engine);
-    ASSERT_NE(engine, engine2);
-    ASSERT_NE(engine2, engine);
+    CHECK(engine == engine);
+    CHECK(engine != engine2);
+    CHECK(engine2 != engine);
 
     // Stream I/O
     std::ostringstream os;
@@ -47,7 +47,7 @@ TEST(Xorshift1024Star, Interface)
     is >> engine;
 }
 
-TEST(Jsf64, Interface)
+TEST_CASE("ext::jsf64 / random engine interface")
 {
     std::seed_seq seed_seq;
 
@@ -75,9 +75,9 @@ TEST(Jsf64, Interface)
     // Comparison operators
     auto engine2 = engine;
     engine2.discard(10uLL);
-    ASSERT_EQ(engine, engine);
-    ASSERT_NE(engine, engine2);
-    ASSERT_NE(engine2, engine);
+    CHECK(engine == engine);
+    CHECK(engine != engine2);
+    CHECK(engine2 != engine);
 
     // Stream I/O
     std::ostringstream os;
@@ -86,7 +86,7 @@ TEST(Jsf64, Interface)
     is >> engine;
 }
 
-TEST(Sfc64, Interface)
+TEST_CASE("ext::sfc64 / random engine interface")
 {
     std::seed_seq seed_seq;
 
@@ -114,9 +114,9 @@ TEST(Sfc64, Interface)
     // Comparison operators
     auto engine2 = engine;
     engine2.discard(10uLL);
-    ASSERT_EQ(engine, engine);
-    ASSERT_NE(engine, engine2);
-    ASSERT_NE(engine2, engine);
+    CHECK(engine == engine);
+    CHECK(engine != engine2);
+    CHECK(engine2 != engine);
 
     // Stream I/O
     std::ostringstream os;
@@ -125,7 +125,7 @@ TEST(Sfc64, Interface)
     is >> engine;
 }
 
-TEST(GenerateNormal, MomentTestFloat)
+TEST_CASE("ext::generate_normal (float) / moment test", "[random]")
 {
     auto estimate_moment = [](unsigned long sample_count, unsigned order)
         {
@@ -147,11 +147,11 @@ TEST(GenerateNormal, MomentTestFloat)
         auto const sample_count = 1000000uL;
         auto const tolerance_2sigma = 2 * std::sqrt(moment_variances[order] / sample_count);
         auto const estimated_moment = estimate_moment(sample_count, order);
-        ASSERT_LE(std::abs(estimated_moment - moments[order]), tolerance_2sigma);
+        CHECK(std::abs(estimated_moment - moments[order]) <= tolerance_2sigma);
     }
 }
 
-TEST(GenerateNormal, MomentTestDouble)
+TEST_CASE("ext::generate_normal (double) / moment test", "[random]")
 {
     auto estimate_moment = [](unsigned long sample_count, unsigned order)
         {
@@ -173,6 +173,6 @@ TEST(GenerateNormal, MomentTestDouble)
         auto const sample_count = 1000000uL;
         auto const tolerance_2sigma = 2 * std::sqrt(moment_variances[order] / sample_count);
         auto const estimated_moment = estimate_moment(sample_count, order);
-        ASSERT_LE(std::abs(estimated_moment - moments[order]), tolerance_2sigma);
+        CHECK(std::abs(estimated_moment - moments[order]) <= tolerance_2sigma);
     }
 }

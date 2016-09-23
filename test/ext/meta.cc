@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include <catch.hpp>
 
 #include <ext/meta.hpp>
 
@@ -12,7 +12,7 @@ namespace MakeNonDeduced
     template<typename T> void test_2(T, ext::make_non_deduced_t<T>) {}
 }
 
-TEST(MakeNonDeduced, Test)
+TEST_CASE("ext::make_non_deduced")
 {
     MakeNonDeduced::test_1(1.0, 1);
     MakeNonDeduced::test_2(1.0, 1);
