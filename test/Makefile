@@ -5,13 +5,8 @@ TARGET = ./run
 
 OBJECTS = \
     main.o \
-    ext/array_view.o \
-    ext/getopt.o \
-    ext/iterator.o \
-    ext/meta.o \
-    ext/random.o \
-    ext/smart_pointer.o \
-    ext/stream.o
+    ext/any.o \
+    ext/getopt.o
 
 CXXFLAGS = \
     -std=c++14 \
@@ -20,6 +15,7 @@ CXXFLAGS = \
     -Wextra \
     -Werror \
     -fsanitize=address,undefined \
+    -g \
     -O2 \
     $(EXTRA_CXXFLAGS) \
     -I $(INCLUDE_DIR)
@@ -36,10 +32,58 @@ $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS) $(LDFLAGS)
 
 # Dependencies
-ext/array_view.o: $(INCLUDE_DIR)/ext/array_view.hpp
-ext/getopt.o: $(INCLUDE_DIR)/ext/getopt.hpp
-ext/iterator.o: $(INCLUDE_DIR)/ext/iterator.hpp
-ext/meta.o: $(INCLUDE_DIR)/ext/meta.hpp
-ext/random.o: $(INCLUDE_DIR)/ext/random.hpp
-ext/smart_pointer.o: $(INCLUDE_DIR)/ext/smart_pointer.hpp
-ext/stream.o: $(INCLUDE_DIR)/ext/stream.hpp
+ext/any.o: \
+    $(INCLUDE_DIR)/ext/any.hpp \
+    $(INCLUDE_DIR)/ext/clone_ptr.hpp
+
+ext/array_view.o: \
+    $(INCLUDE_DIR)/ext/array_view.hpp \
+    $(INCLUDE_DIR)/ext/contiguous_container.hpp \
+    $(INCLUDE_DIR)/ext/iterator_range.hpp \
+    $(INCLUDE_DIR)/ext/type_traits.hpp
+
+ext/bit_utility.o: \
+    $(INCLUDE_DIR)/ext/bit_utility.hpp
+
+ext/clone_ptr.o: \
+    $(INCLUDE_DIR)/ext/clone_ptr.hpp
+
+ext/contiguous_container.o: \
+    $(INCLUDE_DIR)/ext/contiguous_container.hpp
+
+ext/getopt.o: \
+    $(INCLUDE_DIR)/ext/getopt.hpp
+
+ext/iterator_range.o: \
+    $(INCLUDE_DIR)/ext/iterator_range.hpp
+
+ext/numeric_utility.o: \
+    $(INCLUDE_DIR)/ext/numeric_utility.hpp
+
+ext/random_utility.o: \
+    $(INCLUDE_DIR)/ext/random_utility.hpp
+
+ext/small_fast_counting_engine_v4.o: \
+    $(INCLUDE_DIR)/ext/small_fast_counting_engine_v4.hpp \
+    $(INCLUDE_DIR)/ext/bit_utility.hpp \
+    $(INCLUDE_DIR)/ext/random_utility.hpp \
+    $(INCLUDE_DIR)/ext/stream_utility.hpp
+
+ext/stream_utility.o: \
+    $(INCLUDE_DIR)/ext/stream_utility.hpp
+
+ext/type_conversion.o: \
+    $(INCLUDE_DIR)/ext/type_conversion.hpp
+
+ext/type_map.o: \
+    $(INCLUDE_DIR)/ext/type_map.hpp
+
+ext/type_traits.o: \
+    $(INCLUDE_DIR)/ext/type_traits.hpp
+
+ext/value_ptr.o: \
+    $(INCLUDE_DIR)/ext/value_ptr.hpp \
+    $(INCLUDE_DIR)/ext/clone_ptr.hpp
+
+ext/ziggurat_normal_distribution.o: \
+    $(INCLUDE_DIR)/ext/ziggurat_normal_distribution.hpp
