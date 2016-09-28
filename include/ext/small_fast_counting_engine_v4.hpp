@@ -26,7 +26,12 @@
 namespace ext
 {
     /**
-     * Small fast counting random number generator version 4 from PractRand.
+     * Small fast counting random number generator version 4 from PractRand [1].
+     *
+     * See "sfc16 / sfc32 / sfc64" in [2] for details.
+     *
+     * [1]: http://pracrand.sourceforge.net/
+     * [2]: http://pracrand.sourceforge.net/RNG_engines.txt
      */
     template<typename Word,
              unsigned BarrelShift,
@@ -212,11 +217,12 @@ namespace ext
         operator<<(std::basic_ostream<Char, CharTraits>& output_stream,
                    small_fast_counting_engine_v4 const& engine)
         {
-            ext::save_stream_flags flags {output_stream};
+            Char const space = output_stream.widen(' ');
+
+            ext::save_stream_format<Char, CharTraits> format {output_stream};
             output_stream.flags(std::ios::dec | std::ios::left);
             output_stream.fill(space);
 
-            Char const space = output_stream.widen(' ');
             output_stream << engine.state_a_ << space
                           << engine.state_b_ << space
                           << engine.state_c_ << space
@@ -237,7 +243,7 @@ namespace ext
         operator>>(std::basic_istream<Char, CharTraits>& input_stream,
                    small_fast_counting_engine_v4& engine)
         {
-            ext::save_stream_flags flags {output_stream};
+            ext::save_stream_format<Char, CharTraits> format {input_stream};
             input_stream.flags(std::ios::dec | std::ios::skipws);
 
             std::array<result_type, 4> tmp;
