@@ -83,8 +83,7 @@ namespace ext
          */
         template<typename T>
         any(T&& value)
-            : data_ {std::make_unique<ext::holder<std::decay_t<T>>>(
-                        std::forward<T>(value))}
+            : data_ {new ext::holder<std::decay_t<T>>(std::forward<T>(value))}
         {
         }
 
@@ -134,8 +133,7 @@ namespace ext
         template<typename T, typename... Args>
         void emplace(Args&&... args)
         {
-            data_.reset(std::make_unique<ext::holder<T>>(
-                std::forward<Args>(args)...));
+            data_.reset(new ext::holder<T>(std::forward<Args>(args)...));
         }
 
         /**

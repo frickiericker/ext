@@ -67,8 +67,9 @@ namespace ext
         /**
          * Initializes to the given pointer.
          */
-        clone_ptr(std::unique_ptr<T> ptr)
-            : ptr_ {std::move(ptr)}
+        explicit
+        clone_ptr(T* ptr)
+            : ptr_ {ptr}
         {
         }
 
@@ -174,11 +175,6 @@ namespace ext
         void reset(T* ptr) noexcept
         {
             ptr_.reset(ptr);
-        }
-
-        void reset(std::unique_ptr<T> ptr) noexcept
-        {
-            ptr_.swap(ptr);
         }
 
         /**
