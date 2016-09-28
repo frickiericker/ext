@@ -15,8 +15,8 @@ namespace ext
     /**
      * Rotates bits to left.
      *
-     * Behaviour is undefined if the rotation amount is greater than the bit
-     * width of the integral type.
+     * Behaviour is undefined if the rotation amount is greater than or equal
+     * to the bit width of the integral type.
      */
     template<typename T,
              std::enable_if_t<std::is_integral<T>::value, int> = 0>
