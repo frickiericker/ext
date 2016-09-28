@@ -7,6 +7,7 @@
 #ifndef EXT_RANDOM_UTILITY_HPP
 #define EXT_RANDOM_UTILITY_HPP
 
+#include <algorithm>
 #include <array>
 #include <limits>
 #include <random>
@@ -66,8 +67,9 @@ namespace ext
             state[i] = 0;
             for (std::size_t j = 0; j < seed_per_word; ++j)
             {
-                state[i] <<= 32;
-                state[i] |= T(seeds[N * i + j]);
+                state[i] <<= 1;
+                state[i] <<= std::min(word_bits, std::size_t {32}) - 1;
+                state[i] |= T(seeds[i * seed_per_word + j]);
             }
         }
     }
