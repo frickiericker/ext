@@ -127,6 +127,16 @@ TEST_CASE("ext::array_view - copy constructor")
     CHECK(av_copy.size() == av.size());
 }
 
+TEST_CASE("ext::array_view - copy assignment")
+{
+    int arr[5] {1, 2, 3, 4, 5};
+    ext::array_view<int> av {arr};
+    ext::array_view<int> av_copy;
+    av_copy = av;
+    CHECK(av_copy.data() == av.data());
+    CHECK(av_copy.size() == av.size());
+}
+
 TEST_CASE("ext::array_view - element access")
 {
     int arr[5] {1, 2, 3, 4, 5};
