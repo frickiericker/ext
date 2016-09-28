@@ -8,6 +8,7 @@
 #define EXT_ZIGGURAT_NORMAL_DISTRIBUTION_HPP
 
 #include <random>
+#include <utility>
 
 #include <cassert>
 #include <cmath>
@@ -37,8 +38,27 @@ namespace ext
         {
             return std::exp(-x * x / 2);
         }
+
+        template<std::size_t bits, typename URNG>
+        std::pair<unsigned, double> generate_bits_and_canonical(URNG& engine)
+        {
+            static constexpr auto rest_width = ((URNG::max() - URNG::min()) >> bits) + 1u;
+            static constexpr auto mask = (1u << bits) - 1u;
+            static constexpr auto norm = 1.0 / rest_width;
+            auto const value = engine() - URNG::min();
+            return std::pair<unsigned, double>(value & mask, (value >> bits) * norm);
+        }
     }
 
+    /**
+     * Produces real values on the normal distribution.
+     *
+     * This implementation uses ziggurat algorithm [1] to generate normally
+     * distributed numbers. The algorithm uses a lookup table and is very fast
+     * compared to the conventional Box-Muller transform method.
+     *
+     * [1]: https://en.wikipedia.org/wiki/Ziggurat_algorithm
+     */
     template<typename T, std::size_t BlockCount = 128>
     struct ziggurat_normal_distribution
     {
@@ -74,7 +94,7 @@ namespace ext
         {
             for (;;)
             {
-                auto const r = ext::generate_bits_and_canonical<8>(engine);
+                auto const r = detail::generate_bits_and_canonical<8>(engine);
                 auto const layer = std::get<0>(r) & 0x7F;
                 auto const sign = (std::get<0>(r) & 0x80) ? 1.0 : -1.0;
                 auto const u = std::get<1>(r);
