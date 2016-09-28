@@ -8,7 +8,8 @@ OBJECTS = \
     ext/any.o \
     ext/array_view.o \
     ext/bit_utility.o \
-    ext/getopt.o
+    ext/getopt.o \
+    ext/stream_utility.o
 
 CXXFLAGS = \
     -std=c++14 \
