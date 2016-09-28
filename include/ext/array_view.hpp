@@ -410,23 +410,6 @@ namespace ext
     };
 
     /**
-     * Compares the viewed memory address (not content).
-     */
-    template<typename T>
-    constexpr
-    bool operator==(ext::array_view<T> a, ext::array_view<T> b) noexcept
-    {
-        return a.begin() == b.begin() && a.end() == b.end();
-    }
-
-    template<typename T>
-    constexpr
-    bool operator!=(ext::array_view<T> a, ext::array_view<T> b) noexcept
-    {
-        return !(a == b);
-    }
-
-    /**
      * Creates `ext::array_view` with element type deduced from argument.
      */
     template<typename T>
