@@ -19,7 +19,6 @@ OBJECTS = \
     ext/type_conversion.o \
     ext/type_map.o \
     ext/type_traits.o \
-    ext/value_ptr.o \
     ext/ziggurat_normal_distribution.o
 
 CXXFLAGS = \
@@ -94,10 +93,6 @@ ext/type_map.o: \
 
 ext/type_traits.o: \
     $(INCLUDE_DIR)/ext/type_traits.hpp
-
-ext/value_ptr.o: \
-    $(INCLUDE_DIR)/ext/value_ptr.hpp \
-    $(INCLUDE_DIR)/ext/clone_ptr.hpp
 
 ext/ziggurat_normal_distribution.o: \
     $(INCLUDE_DIR)/ext/ziggurat_normal_distribution.hpp
