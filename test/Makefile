@@ -6,6 +6,7 @@ TARGET = ./run
 OBJECTS = \
     main.o \
     ext/any.o \
+    ext/array_view.o \
     ext/getopt.o
 
 CXXFLAGS = \
