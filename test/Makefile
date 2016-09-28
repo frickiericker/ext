@@ -8,8 +8,19 @@ OBJECTS = \
     ext/any.o \
     ext/array_view.o \
     ext/bit_utility.o \
+    ext/clone_ptr.o \
+    ext/contiguous_container.o \
     ext/getopt.o \
-    ext/stream_utility.o
+    ext/iterator_range.o \
+    ext/numeric_utility.o \
+    ext/random_utility.o \
+    ext/small_fast_counting_engine_v4.o \
+    ext/stream_utility.o \
+    ext/type_conversion.o \
+    ext/type_map.o \
+    ext/type_traits.o \
+    ext/value_ptr.o \
+    ext/ziggurat_normal_distribution.o
 
 CXXFLAGS = \
     -std=c++14 \

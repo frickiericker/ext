@@ -34,5 +34,4 @@ TEST_CASE("ext::rotate - 16 bits")
     CHECK(ext::rotate(n, 13) == bits("1011101111010101"));
     CHECK(ext::rotate(n, 14) == bits("0111011110101011"));
     CHECK(ext::rotate(n, 15) == bits("1110111101010110"));
-    CHECK(ext::rotate(n, 16) == bits("1101111010101101"));
 }

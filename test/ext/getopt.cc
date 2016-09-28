@@ -1,4 +1,5 @@
 #include <catch.hpp>
+
 #include <ext/getopt.hpp>
 
 
@@ -10,7 +11,7 @@ TEST_CASE("ext::getopt - flag argumnets")
     char argv_1[] = "-a";
     char argv_2[] = "-bv";
     char argv_3[] = "-12vv";
-    char argv_4[] = "hoge";
+    char argv_4[] = "foobar";
     char* argv[] = {argv_0, argv_1, argv_2, argv_3, argv_4, nullptr};
 
     ext::getopt getopt;
@@ -84,8 +85,8 @@ TEST_CASE("ext::getopt - optarg")
     int argc = 5;
     char argv_0[] = "prog";
     char argv_1[] = "-x";
-    char argv_2[] = "hoge";
-    char argv_3[] = "-ayfuga";
+    char argv_2[] = "foobar";
+    char argv_3[] = "-aybaz";
     char argv_4[] = "123";
     char* argv[] = {argv_0, argv_1, argv_2, argv_3, argv_4, nullptr};
 
@@ -111,14 +112,14 @@ TEST_CASE("ext::getopt - optarg")
             ++x;
             CHECK(getopt.optind == 3);
             CHECK(getopt.optopt == 'x');
-            CHECK_THAT(getopt.optarg, Catch::Equals("hoge"));
+            CHECK_THAT(getopt.optarg, Catch::Equals("foobar"));
             break;
 
           case 'y':
             ++y;
             CHECK(getopt.optind == 4);
             CHECK(getopt.optopt == 'y');
-            CHECK_THAT(getopt.optarg, Catch::Equals("fuga"));
+            CHECK_THAT(getopt.optarg, Catch::Equals("baz"));
             break;
 
           case 'z':
@@ -173,6 +174,7 @@ TEST_CASE("ext::getopt - deal with single argv")
 
     CHECK(a == 0);
     CHECK(x == 0);
+    CHECK(unknown == 0);
 }
 
 // Initial colon of optstring suppresses diagnostics by getopt
@@ -212,7 +214,7 @@ TEST_CASE("ext::getopt - initial colon of optstring")
 
           case ':': // -x <nothing>
             ++colon;
-            CHECK(getopt.optind > argc); // POSIX
+            CHECK(getopt.optind > argc); // required by POSIX
             CHECK(getopt.optopt == 'x');
             break;
 
