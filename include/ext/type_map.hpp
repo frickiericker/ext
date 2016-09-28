@@ -79,7 +79,7 @@ namespace ext
         using value_type = T;
 
         type_map()
-            : entries_(type_directory::size())
+            : entries_(ext::type_directory::size())
         {
         }
 
@@ -99,8 +99,8 @@ namespace ext
         template<typename Key, typename... Args>
         value_type& associate(Args&&... args)
         {
-            return entries_[type_directory::index<Key>]
-                        = value_type(std::forward<Args>(args)...);
+            std::size_t const index = ext::type_directory::index<Key>;
+            return entries_[index] = value_type(std::forward<Args>(args)...);
         }
 
         //@{
