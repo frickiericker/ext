@@ -58,6 +58,7 @@ namespace ext
         // Note: Conforming seed sequence generates 32-bit unsigned integers.
         constexpr std::size_t word_bits = std::numeric_limits<T>::digits;
         constexpr std::size_t seed_per_word = (word_bits + 31) / 32;
+        constexpr std::size_t shift_bits = std::min<std::size_t>(word_bits, 32);
 
         std::array<typename Seed::result_type, N * seed_per_word> seeds;
         seed.generate(seeds.begin(), seeds.end());
@@ -67,9 +68,8 @@ namespace ext
             state[i] = 0;
             for (std::size_t j = 0; j < seed_per_word; ++j)
             {
-                state[i] <<= 1;
-                state[i] <<= std::min(word_bits, std::size_t {32}) - 1;
-                state[i] |= T(seeds[i * seed_per_word + j]);
+                state[i] = T(state[i] << 1 << (shift_bits - 1));
+                state[i] = T(state[i] | seeds[i * seed_per_word + j]);
             }
         }
     }

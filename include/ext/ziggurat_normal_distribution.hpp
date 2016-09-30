@@ -46,7 +46,7 @@ namespace ext
             static constexpr auto mask = (1u << bits) - 1u;
             static constexpr auto norm = 1.0 / rest_width;
             auto const value = engine() - URNG::min();
-            return std::pair<unsigned, double>(value & mask, (value >> bits) * norm);
+            return std::pair<unsigned, double>(value & mask, double(value >> bits) * norm);
         }
     }
 

@@ -19,7 +19,7 @@ TEST_CASE("ext::ziggurat_normal_distribution - moment test", "[random]")
             for (auto i = 0uL; i < sample_count; ++i) {
                 sum += std::pow(normal(engine), order);
             }
-            return sum / sample_count;
+            return sum / double(sample_count);
         };
 
     // E[X^m] = (m/2)!!  for even m

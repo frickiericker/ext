@@ -157,9 +157,9 @@ namespace ext
             auto& c = state_c_;
 
             auto const tmp = result_type(a + b + counter++);
-            a = b ^ result_type(b >> right_shift);
-            b = c + result_type(c << left_shift);
-            c = ext::rotate(c, barrel_shift) + tmp;
+            a = result_type(b ^ (b >> right_shift));
+            b = result_type(c + (c << left_shift));
+            c = result_type(ext::rotate(c, barrel_shift) + tmp);
 
             return tmp;
         }

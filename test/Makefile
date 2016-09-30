@@ -28,6 +28,7 @@ CXXFLAGS = \
     -pedantic-errors \
     -Wall \
     -Wextra \
+    -Wconversion \
     -Werror \
     -fsanitize=address,undefined \
     -g \

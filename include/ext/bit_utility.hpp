@@ -28,7 +28,7 @@ namespace ext
         if (n == 0)
             return x;
         else
-            return T(x << n) | T(x >> (bits - n));
+            return T(T(x << n) | T(x >> (bits - n)));
     }
 }
 
