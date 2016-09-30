@@ -7,7 +7,6 @@
 #ifndef EXT_GETOPT_HPP
 #define EXT_GETOPT_HPP
 
-#include <cstdio>
 #include <cstring>
 
 namespace ext
@@ -21,17 +20,17 @@ namespace ext
     {
         // Associated variables.
         char* optarg = nullptr;
-        int opterr = 1;
         int optind = 1;
         int optopt = 0;
 
-        // Program name used in diagnostic messages. If this is nullptr the
-        // content of argv[0] will be used.
-        char const* progname = nullptr;
-
         /**
-         * Behaves like POSIX getopt, but uses member variables instead of
-         * global ones.
+         * Behaves like POSIX getopt, using member variables instead of globals.
+         *
+         * POSIX requires that getopt should write diagnostic message to stderr
+         * on error, but this implementation does not do that. This behaviour is
+         * equivalent to a conforming implementation with `opterr` set to zero.
+         * Error is reported by returning ':' or '?' and setting `optopt` as
+         * specified by the standard.
          */
         int operator()(int argc, char* const* argv, char const* optstring)
         {
@@ -62,12 +61,6 @@ namespace ext
             if (!option)
             {
                 // Unknown option
-                if (*optstring != ':' && opterr)
-                {
-                    std::fprintf(stderr, "%s: unknown option -%c\n",
-                                 (progname ? progname : argv[0]), optopt);
-                }
-
                 if (*curopt_ == '\0')
                 {
                     ++optind;
@@ -86,11 +79,6 @@ namespace ext
                 // Missing argument
                 if (!optarg)
                 {
-                    if (*optstring != ':' && opterr)
-                    {
-                        std::fprintf(stderr, "%s: missing argument for -%c\n",
-                                     (progname ? progname : argv[0]), optopt);
-                    }
                     return (*optstring == ':') ? ':' : '?';
                 }
             }
