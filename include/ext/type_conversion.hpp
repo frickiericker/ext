@@ -22,7 +22,12 @@ namespace ext
     }
 
     /**
-     * View raw pointer as shared_ptr.
+     * View raw pointer as unmanaged shared_ptr.
+     *
+     * Caution: The returned shared_ptr object does not own the pointer. It is
+     * programmer's responsibility to correctly destroy the pointed object. Yet
+     * this function may be useful to, say, passing a pointer to static object
+     * to some API that expects shared_ptr as input.
      */
     template<typename T>
     std::shared_ptr<T> as_shared_ptr(T* ptr)
