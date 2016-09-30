@@ -12,7 +12,9 @@ OBJECTS = \
     ext/contiguous_container.o \
     ext/getopt.o \
     ext/iterator_range.o \
+    ext/lifetime_utility.o \
     ext/numeric_utility.o \
+    ext/polymorphic_value.o \
     ext/random_utility.o \
     ext/small_fast_counting_engine_v4.o \
     ext/stream_utility.o \
@@ -70,8 +72,15 @@ ext/getopt.o: \
 ext/iterator_range.o: \
     $(INCLUDE_DIR)/ext/iterator_range.hpp
 
+ext/lifetime_utility.o: \
+    $(INCLUDE_DIR)/ext/lifetime_utility.hpp
+
 ext/numeric_utility.o: \
     $(INCLUDE_DIR)/ext/numeric_utility.hpp
+
+ext/polymorphic_value.o: \
+    $(INCLUDE_DIR)/ext/polymorphic_value.hpp \
+    $(INCLUDE_DIR)/ext/lifetime_utility.hpp
 
 ext/random_utility.o: \
     $(INCLUDE_DIR)/ext/random_utility.hpp
