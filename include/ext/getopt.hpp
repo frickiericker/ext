@@ -12,11 +12,10 @@
 
 namespace ext
 {
-    /*
-     * A function-object implementation of POSIX getopt(1).
+    /**
+     * A function-object implementation of POSIX getopt(3) [1].
      *
-     * Reference:
-     *  http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html
+     * [1]: http://pubs.opengroup.org/onlinepubs/9699919799/functions/getopt.html
      */
     struct getopt
     {
@@ -30,9 +29,9 @@ namespace ext
         // content of argv[0] will be used.
         char const* progname = nullptr;
 
-        /*
-         * Behaves like POSIX getopt(1), but uses the member variables instead
-         * of global ones.
+        /**
+         * Behaves like POSIX getopt, but uses member variables instead of
+         * global ones.
          */
         int operator()(int argc, char* const* argv, char const* optstring)
         {
