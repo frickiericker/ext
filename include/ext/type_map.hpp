@@ -21,9 +21,14 @@ namespace ext
     {
         /**
          * The hash code for the static type `T`.
+         *
+         * Note: this cannot be variable template due to bugs in compilers.
          */
         template<typename T>
-        static std::size_t const index;
+        struct index
+        {
+            static std::size_t const value;
+        };
 
         /**
          * The number of registered types.
@@ -49,7 +54,8 @@ namespace ext
     };
 
     template<typename T>
-    std::size_t const type_directory::index = type_directory::counter()++;
+    std::size_t const type_directory::index<T>::value
+        = type_directory::counter()++;
 
     /**
      * Collection of `T` values associated to static types.
@@ -99,7 +105,7 @@ namespace ext
         template<typename Key, typename... Args>
         value_type& associate(Args&&... args)
         {
-            std::size_t const index = ext::type_directory::index<Key>;
+            std::size_t const index = ext::type_directory::index<Key>::value;
             return entries_[index] = value_type(std::forward<Args>(args)...);
         }
 
@@ -118,13 +124,13 @@ namespace ext
         template<typename Key>
         value_type& value() noexcept
         {
-            return entries_[type_directory::index<Key>];
+            return entries_[type_directory::index<Key>::value];
         }
 
         template<typename Key>
         value_type const& value() const noexcept
         {
-            return entries_[type_directory::index<Key>];
+            return entries_[type_directory::index<Key>::value];
         }
         //@}
 

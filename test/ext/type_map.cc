@@ -14,11 +14,11 @@ TEST_CASE("ext::type_directory")
 
     // Here five types are queried
     std::unordered_set<std::size_t> const indices {
-        ext::type_directory::index<int>,
-        ext::type_directory::index<char>,
-        ext::type_directory::index<char const>,
-        ext::type_directory::index<struct some_type>,
-        ext::type_directory::index<struct other_type>
+        ext::type_directory::index<int>::value,
+        ext::type_directory::index<char>::value,
+        ext::type_directory::index<char const>::value,
+        ext::type_directory::index<struct some_type>::value,
+        ext::type_directory::index<struct other_type>::value
     };
     CHECK(indices.size() == std::size_t(5));
 }
