@@ -1,5 +1,5 @@
 /*
- * Re-entrant POSIX getopt(3).
+ * Command-option parsing.
  *
  * Distributed under the Boost Software License, Version 1.0. (See accompanying
  * file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -18,9 +18,19 @@ namespace ext
      */
     struct getopt
     {
-        // Associated variables.
+        /**
+         * Argument of current option.
+         */
         char* optarg = nullptr;
+
+        /**
+         * Index of the next element of argv to be processed.
+         */
         int optind = 1;
+
+        /**
+         * Currently processed option character.
+         */
         int optopt = 0;
 
         /**
@@ -94,7 +104,6 @@ namespace ext
         }
 
       private:
-
         // Points to substring of option argument in argv, starts with the
         // option character that will be processed in next call.
         char* curopt_ = nullptr;
