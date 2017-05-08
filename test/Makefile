@@ -30,7 +30,6 @@ CXXFLAGS = \
     -Wextra \
     -Wconversion \
     -Werror \
-    -fsanitize=address,undefined \
     -g \
     -O2 \
     $(EXTRA_CXXFLAGS) \
