@@ -1,0 +1,27 @@
+language: cpp
+
+compiler:
+  - clang++
+  - g++
+
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-precise
+      - llvm-toolchain-precise-3.8
+      - ubuntu-toolchain-r-test
+    packages:
+      - clang-3.8
+      - g++-5
+
+script:
+  - if [ "${CXX}" = "clang++" ]; then
+      export CXX="clang++-3.8"
+      export EXTRA_CXXFLAGS="-fsanitize=address,undefined"
+    fi
+  - if [ "${CXX}" = "g++" ]; then
+      export CXX="g++-5";
+    fi
+  - cd test
+  - make -j ${JOBS}
+  - ./run
