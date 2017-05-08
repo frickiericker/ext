@@ -27,7 +27,8 @@ namespace ext
      * Caution: The returned shared_ptr object does not own the pointer. It is
      * programmer's responsibility to correctly destroy the pointed object. Yet
      * this function may be useful to, say, passing a pointer to static object
-     * to some API that expects shared_ptr as input.
+     * to some API that expects shared_ptr as input. Passing `std::cout` as
+     * `std::shared_ptr<std::ostream>` comes to my mind.
      */
     template<typename T>
     std::shared_ptr<T> as_shared_ptr(T* ptr)
