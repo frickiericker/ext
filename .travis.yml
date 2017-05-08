@@ -16,8 +16,8 @@ addons:
 
 script:
   - if [ "${CXX}" = "clang++" ]; then
-      export CXX="clang++-3.8"
-      export EXTRA_CXXFLAGS="-fsanitize=address,undefined"
+      export CXX="clang++-3.8";
+      export EXTRA_CXXFLAGS="-fsanitize=address,undefined";
     fi
   - if [ "${CXX}" = "g++" ]; then
       export CXX="g++-5";
